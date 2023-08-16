@@ -1,0 +1,112 @@
+.container {
+      position: relative;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 960px;
+}
+
+.sidebar {
+      border-radius: 4px;
+      position: fixed;
+      width: 200px;
+      top: 4rem;
+      bottom: 0;
+      z-index: 2;
+      overflow: hidden;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 0;
+      background-color: #fff;
+}
+
+.rightWrap {
+      width: 980px;
+      margin-top: 80px;
+      margin-left: 220px
+}
+
+.sendButton {
+      margin-top: 24px;
+      /* margin-left: 220px; */
+      color: #fff;
+      background: #1e80ff;
+      width: 184px;
+      /* height: 40px; */
+      font-size: 14px;
+}
+
+.homeContainer {
+      background-color: transparent;
+      position: relative;
+      display: flex;
+      color: #86909c;
+}
+
+.mainContent {
+      min-height: calc(100vh - 108px);
+      margin-bottom: 24px;
+}
+
+.main {
+      max-width: 692px;
+      width: 692px;
+}
+
+.rightTop {
+      font-size: 18px;
+}
+
+.rightBottom {
+      color: #8a919f;
+}
+
+.right {
+      width: 268px;
+      position: absolute;
+      right: 0;
+}
+
+.dataCard {
+      flex: 1;
+      background-color: #f7f8fa;
+      margin: 0 10px 10px 0;
+      padding: 15px;
+}
+
+.dataCardEntire {
+      /* flex: 1; */
+      width: 265px;
+      background-color: #f7f8fa;
+      color: #4e5969;
+      margin: 0 20px 20px 0;
+      padding: 15px;
+}
+
+.dataCardEntire2 {
+      /* flex: 1; */
+      width: 265px;
+      background-color: #f7f8fa;
+      color: #4e5969;
+      margin: 0 20px 20px 0;
+      margin-right: 0;
+      padding: 15px;
+}
+
+.activityCard {
+      position: fixed;
+      top: 4rem;
+      width: 268px;
+      height: 168px;
+      background: #fff;
+      border-radius: 4px;
+      overflow: hidden;
+}
+
+.dividerGap {
+      margin: 0 16px;
+      background-color: #e5e6eb;
+      height: 1.4em;
+}

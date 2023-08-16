@@ -1,0 +1,12 @@
+.articleSuspendedPanel {
+      position: absolute;
+      /* margin-left: -7rem; */
+      /* top: 140px;
+      z-index: 2; */
+}
+
+.panelBtn {
+      background-color: #fff;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .04);
+      cursor: pointer;
+}

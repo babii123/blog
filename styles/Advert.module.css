@@ -1,0 +1,9 @@
+.addiv {
+      margin-top: .5rem;
+}
+
+.addiv div {
+      border-radius: .3rem;
+      margin-bottom: .2rem;
+      overflow: hidden;
+}

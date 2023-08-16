@@ -1,0 +1,37 @@
+.authorInfoBlock {
+      display: flex;
+      flex-direction: column;
+      /* align-items: center; */
+}
+
+.authorInfoBox {
+      display: flex;
+      margin-bottom: 4px;
+      flex: 1;
+}
+
+.authorNameBox {
+      margin-bottom: 8px;
+      flex: 3;
+      display: flex;
+      flex-direction: column;
+}
+
+.authorLink {
+      flex: 1;
+}
+
+.authorName {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 500;
+      color: #424754;
+      line-height: 1.5rem;
+}
+
+.authorIntroduce {
+      font-size: 14px;
+      color: #737983;
+      margin-top: 2px;
+      line-height: 22px;
+}

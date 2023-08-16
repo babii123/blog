@@ -1,0 +1,39 @@
+.container {
+      margin: auto;
+      width: 100%;
+}
+
+.navLink {
+      display: flex;
+      position: relative;
+      padding: 0 30px;
+      background-color: #fff;
+      border-bottom: 2px solid rgba(230, 230, 231, .5);
+}
+
+.navLinkItem {
+      font-size: 16px;
+      position: absolute;
+      line-height: 48px;
+      right: 30px;
+      color: #72777b;
+}
+
+.listButton {
+      flex: 2;
+      background-color: #92c452;
+      color: #fff;
+      border: 1px solid #92c452;
+      width: 90px;
+      height: 30px;
+      font-size: 12px;
+      border-radius: 2px;
+}
+
+.listName {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2e3135;
+      max-width: 200px;
+      display: block
+}

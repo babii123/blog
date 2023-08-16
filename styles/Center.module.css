@@ -1,0 +1,66 @@
+.authorInfoBlock {
+      display: flex;
+      /* align-items: center; */
+      background-color: #fff;
+      padding: 2rem;
+      margin-bottom: 0.5rem;
+}
+
+.authorName {
+      flex: 1;
+      font-size: 0.9rem;
+      line-height: 32px;
+}
+
+.authorLink {
+      flex: 1;
+}
+
+.metaBox {
+      font-size: 14px;
+      color: #72777b;
+      margin-top: 2px;
+      line-height: 32px;
+}
+
+.blockTitle {
+      padding-left: 8px;
+      padding-top: 10px;
+      color: #31445b;
+}
+
+.block {
+      background-color: #fff;
+      padding: 8px;
+
+}
+
+.itemsTitle {
+      font-size: 16px;
+      line-height: 16px;
+      /* font-weight: 600; */
+      color: #31445b;
+      /* margin-right: auto; */
+}
+
+.itemsCount {
+      float: right;
+      color: #31445b;
+}
+
+.itemsCount1{
+      font-size: 16px;
+      line-height: 16px;
+      font-weight: 700;
+      color:#31445b;
+}
+
+.contactIcon{
+      font-size: 20px;
+      margin-left: 15px;
+}
+
+.itemIcon {
+      color: #7a7a7a;
+      margin-right: 14px;
+}
