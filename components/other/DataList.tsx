@@ -6,7 +6,7 @@ import {
 import { useEffect } from 'react';
 import { Row, Col, List, FloatButton, Affix, Tabs, Pagination, Divider } from "antd";
 import Advert from "./Advert";
-import styles from '../../styles/index.module.css'
+import styles from '../../styles/index.module.scss'
 import Tocify from '../tocify';
 import { marked } from "marked";
 import { useState } from 'react';

@@ -1,25 +1,36 @@
-// import Router from 'next/router';
-import { NextResponse, NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 
-const middleware = (req: NextRequest, res: NextResponse) => {
-      // 在这里进行验证逻辑，例如检查用户是否已登录或具有特定权限
-      // const isAuthenticated = fetch('/api/hello')
-      // console.log(isAuthenticated);
+const middleware = async (req: NextRequest, res: NextResponse) => {
 
-      // if (!isAuthenticated) {
-      //       // 如果未通过验证，则重定向到登录页面或其他指定页面
-      //       // Router.push('/error/404');
-      //       return;
-      // }
-      // Router.push(req.url)
+      const Error_404_Url = new URL('/error/404', req.url)
+      const token = req.cookies.get("token")?.value
 
-      // 如果通过验证，则调用下一个中间件或处理程序
-      // const loginUrl = new URL('/error/404', req.url)
-      // if (req.nextUrl.pathname.startsWith('/creator')){
-      //       // loginUrl.searchParams.set('from', req.nextUrl.pathname)
-      //       return NextResponse.redirect(loginUrl)
-      // }
-      return;
+      try {
+            // 判断需要验证的路径
+            if (req.nextUrl.pathname.startsWith('/creator') || req.nextUrl.pathname.startsWith('/editor')) {
+                  // 在这里进行验证逻辑，例如检查用户是否已登录或具有特定权限
+                  const result = await fetch('http://localhost:8080/blog/checkLogin',
+                        {
+                              method: "GET",
+                              headers: { "token": token || "" }
+                        })
+                  const isLogin = (await result.json()).data
+                  if (isLogin) {
+                        const response = NextResponse.next()
+                        response.headers.set('islogin', 'true')
+                        return response
+                  } else {
+                        req.cookies.delete("token")
+                        const response = NextResponse.next()
+                        response.headers.set('islogin', 'false')
+                        return response
+                  }
+            }
+            return;
+      } catch (error) {
+            return NextResponse.redirect(Error_404_Url)     
+      }
+
 };
 
 export default middleware;

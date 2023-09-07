@@ -11,8 +11,8 @@ export default function Home() {
   const url = "/article"
   const countUrl = "/article/getCount"
 
-  const [data,setData] = useState<Array<GetAritcleListModel>>();
-  const [count,setCount] = useState<number>()
+  const [data, setData] = useState<Array<GetAritcleListModel>>();
+  const [count, setCount] = useState<number>()
 
   useEffect(() => {
     console.log('type执行...', url, countUrl);
@@ -40,11 +40,9 @@ export default function Home() {
       <Head>
         <title>首页</title>
       </Head>
-      <NiceModal.Provider>
-        <Header />
-        <DataList url={url} countUrl={countUrl} data={data as Array<GetAritcleListModel>} count={count || 0}/>
-        <Footer />
-      </NiceModal.Provider>
+      <Header />
+      <DataList url={url} countUrl={countUrl} data={data as Array<GetAritcleListModel>} count={count || 0} />
+      <Footer />
     </>
   );
 }

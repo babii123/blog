@@ -10,7 +10,8 @@ import { GetAritcleListModel } from "model/ResponseModel";
 import NiceModal from "@ebay/nice-modal-react";
 import Head from "next/head";
 
-export default function Type({ url, countUrl, headName }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Type({ url, countUrl, headName }:
+       InferGetServerSidePropsType<typeof getServerSideProps>) {
       const [data, setData] = useState<Array<GetAritcleListModel>>()
       const [count, setCount] = useState<number>()
 
@@ -51,15 +52,15 @@ export default function Type({ url, countUrl, headName }: InferGetServerSideProp
       );
 }
 
-export const getServerSideProps: GetServerSideProps<{ url: string, countUrl: string, headName: string }> = async ({ params }: { params: { type: string } }) => {
-
-      
-      console.log('type:', typeArr[params.type]?.url);
-      return {
-            props: {
-                  url: typeArr[params.type]?.url,
-                  countUrl: typeArr[params.type]?.countUrl,
-                  headName: typeArr[params.type]?.headName
+export const getServerSideProps:
+      GetServerSideProps<{ url: string, countUrl: string, headName: string }>
+      = async ({ params }: { params: { type: string } }) => {
+            console.log('type:', typeArr[params.type]?.url);
+            return {
+                  props: {
+                        url: typeArr[params.type]?.url,
+                        countUrl: typeArr[params.type]?.countUrl,
+                        headName: typeArr[params.type]?.headName
+                  }
             }
       }
-}

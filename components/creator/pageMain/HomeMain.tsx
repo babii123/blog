@@ -7,17 +7,26 @@ import { Avatar, Card, Divider, Statistic } from 'antd';
 import { RightOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react';
 
-import styles from '../../../styles/creator.module.css'
+import styles from '../../../styles/creator.module.scss'
 import BlogList from '../BlogList';
 
 const HomeMain: React.FC = () => {
+
+      const [token, setToken] = useState<string>()
+      const [framer_img, setframerImg] = useState<string>()
+      const [framer_id, setframerId] = useState<string>()
+
+      useEffect(() => {
+            setframerImg(localStorage.getItem("framer_img") || "")
+            setframerId(localStorage.getItem("framer_id") || "")
+      }, [])
 
       return (
             <>
                   <div className={styles.main}>
                         <Card style={{ marginBottom: '20px' }}>
                               <div style={{ display: "flex", fontSize: '16px' }}>
-                                    <Avatar size={64} />
+                                    <Avatar size={64} src={framer_img}/>
                                     <div style={{ marginLeft: '15px', padding: '3px 0' }}>
                                           <div className={styles.rightTop}>Babii</div>
                                           <div className={styles.rightBottom} style={{ marginTop: '6px' }}>

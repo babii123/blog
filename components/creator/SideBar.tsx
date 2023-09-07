@@ -5,7 +5,7 @@
 import type { MenuProps } from 'antd';
 import { Menu, Button } from 'antd';
 import { CreatorSideBarIcon } from '../../utils/icon'
-import styles from '../../styles/creator.module.css'
+import styles from '../../styles/creator.module.scss'
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 

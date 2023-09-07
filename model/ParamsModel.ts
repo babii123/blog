@@ -18,3 +18,22 @@ export interface RegisterParam {
       phone: string,
       recentTime: null
 }
+
+export interface CommentParam{
+      articleId: string,
+      framerId: string,
+      content: string
+}
+
+export interface ReplyParam{
+      articleId: string,
+      framerId: string,
+      content: string,
+      replyCommentId: number,
+      topCommentId: number
+}
+
+export interface LikeCommentParam{
+      framerId: string,
+      commentId: number
+}

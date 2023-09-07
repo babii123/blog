@@ -103,3 +103,31 @@ export interface FramerEditModel {
       phone: string,
       introduce: string,
 }
+
+export interface CommentListModel {
+      commentId: number,
+      framerId: string,
+      framerName: string,
+      framerAvatar: string,
+      content: string,
+      commentDate: number,
+      beReplyCount: number,
+      beLikeCount: number,
+      beLike: boolean,
+      items: Array<CommentItem>
+}
+
+export interface CommentItem{
+      commentId: number,
+      framerId: string,
+      framerName: string,
+      framerAvatar: string,
+      content: string,
+      commentDate: number,
+      replyCommentContent: string,
+      replyFramerId: string,
+      replyFramerName: string,
+      beReplyCount: string,
+      beLikeCount: string
+      beLike: boolean
+}

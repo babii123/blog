@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Avatar, Card, Button, Statistic, Divider } from "antd";
 import { EyeFilled, LikeFilled } from '@ant-design/icons'
 
-import styles from "../../styles/Author.module.css";
+import styles from "../../styles/Author.module.scss";
 
 import { ArticleCardIcon } from '../../utils/icon'
 import { getFramerCardInfo } from "../../config/getRequest";

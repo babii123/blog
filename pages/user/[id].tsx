@@ -2,7 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 import { Row, Col, Avatar, Button, Menu, Divider, Statistic } from 'antd'
 import { LikeFilled, EyeFilled, MailFilled, PlusOutlined } from "@ant-design/icons";
-import styles from '../../styles/Center.module.css'
+import styles from '../../styles/Center.module.scss'
 import Header from '../../components/other/Header'
 import ArticlesList from '../../components/user/Articles';
 import Attention from '../../components/user/Attention';
@@ -11,6 +11,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { ArticleCardIcon } from '../../utils/icon'
 import { getCenterInfo, getArticleListByFramerId, getLikeListByFramerId } from '../../config/getRequest'
+import { ArticleInfoModel, FramerInfoModel } from 'model/ResponseModel';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
 
 const items = [
       {
@@ -27,14 +30,14 @@ const items = [
       },
 ]
 
-const Center = ({ articles, framerInfo }) => {
+export default function Center({ articles, framerInfo }: InferGetServerSidePropsType<typeof getServerSideProps>) {
       // const router = useRouter()
       // const { id } = router.query
       const [current, setCurrent] = useState("article")
 
-      const [articleList, setArticleList] = useState(articles);
+      const [articleList, setArticleList] = useState<Array<ArticleInfoModel>>(articles);
       const [framer, setFramer] = useState(framerInfo);
-      const [framerId, setFramerId] = useState();
+      const [framerId, setFramerId] = useState<string>();
       // const [attentionList, setAttentionList] = useState(articleList);
       // 切换 
       const router = useRouter()
@@ -43,31 +46,34 @@ const Center = ({ articles, framerInfo }) => {
             console.log(id);
             // 修改数据
             if (e.key === 'article') {
-                  // getArticleListByFramerId(id).then(res => {
-                  //       if (res.code === 200) {
-                  //             setArticleList(res.data)
-                  //       } else {
-                  //             console.log("个人中心获取文章列表失败：", res);
-                  //       }
-                  // })
+                  getArticleListByFramerId(id).then(res => {
+                        if (res.code === 200) {
+                              setArticleList(res.data)
+                        } else {
+                              console.log("个人中心获取文章列表失败：", res);
+                        }
+                  })
             } else if (e.key === 'like') {
-                  // getLikeListByFramerId(id).then(res => {
-                  //       if (res.code === 200) {
-                  //             setArticleList(res.data)
-                  //       } else {
-                  //             console.log("个人中心获取文章列表失败：", res);
-                  //       }
-                  // })
+                  getLikeListByFramerId(id).then(res => {
+                        if (res.code === 200) {
+                              setArticleList(res.data)
+                        } else {
+                              console.log("个人中心获取文章列表失败：", res);
+                        }
+                  })
             }
             setCurrent(e.key)
       }
       useEffect(() => {
-            // setFramerId(localStorage.getItem("framer_id"))
+            setFramerId(localStorage.getItem("framer_id") || "")
             console.log(framer);
       })
       return (
             <>
-                  <Header></Header>
+                  <Head>
+                        <title>个人主页</title>
+                  </Head>
+                  <Header/>
                   <Row className="comm-main" justify="center">
                         <Col xs={24} sm={24} md={16} lg={18} xl={14} style={{ marginRight: '8px' }}>
                               <div className={styles.authorInfoBlock} >
@@ -94,22 +100,21 @@ const Center = ({ articles, framerInfo }) => {
                                                       id === framerId ?
                                                             (<Button style={{ borderColor: '#007fff', color: '#007fff' }}><a href={`/edit`} target="_blank">编辑个人资料</a></Button>)
                                                             :
-                                                            null
-                                                      // (true ?
-                                                      //       (
-                                                      //             <>
-                                                      //                   <Button type="primary" style={{ backgroundColor: '#f2f3f5', color: '#8a919f', marginRight: '15px' }}>&nbsp;&nbsp;已关注&nbsp;&nbsp;</Button>
-                                                      //                   <Button type="primary" ghost icon={<MailFilled />} style={{ backgroundColor: '#f4f9ff', color: '#1e80ff', borderColor: '#b3d5ff' }}>私信</Button>
-                                                      //             </>
-                                                      //       )
-                                                      //       :
-                                                      //       (
-                                                      //             <>
-                                                      //                   <Button type="primary" icon={<PlusOutlined />} style={{ marginRight: '5px' }}>关注</Button>
-                                                      //                   <Button type="primary" ghost icon={<MailFilled />} style={{ backgroundColor: '#f4f9ff', color: '#1e80ff', borderColor: '#b3d5ff' }}>私信</Button>
-                                                      //             </>
-                                                      //       )
-                                                      // )
+                                                            (true ?
+                                                                  (
+                                                                        <>
+                                                                              <Button type="primary" style={{ backgroundColor: '#f2f3f5', color: '#8a919f', marginRight: '15px' }}>&nbsp;&nbsp;已关注&nbsp;&nbsp;</Button>
+                                                                              <Button type="primary" ghost icon={<MailFilled />} style={{ backgroundColor: '#f4f9ff', color: '#1e80ff', borderColor: '#b3d5ff' }}>私信</Button>
+                                                                        </>
+                                                                  )
+                                                                  :
+                                                                  (
+                                                                        <>
+                                                                              <Button type="primary" icon={<PlusOutlined />} style={{ marginRight: '5px' }}>关注</Button>
+                                                                              <Button type="primary" ghost icon={<MailFilled />} style={{ backgroundColor: '#f4f9ff', color: '#1e80ff', borderColor: '#b3d5ff' }}>私信</Button>
+                                                                        </>
+                                                                  )
+                                                            )
                                                 }
                                           </div>
                                     </div>
@@ -183,24 +188,41 @@ const Center = ({ articles, framerInfo }) => {
       )
 }
 
-Center.getInitialProps = async (context) => {
-      const id = context.query.id
-      const res1 = await getArticleListByFramerId(id)
-      let articles = undefined;
-      let framerInfo = undefined;
-      // if (res1.code === 200) {
-      //       articles = res1.data;
-      // } else {
-      //       console.log("个人中心获取文章列表失败：", res1);
-      // }
+// Center.getInitialProps = async (context) => {
+//       const id = context.query.id
+//       const res1 = await getArticleListByFramerId(id)
+//       let articles = undefined;
+//       let framerInfo = undefined;
+//       // if (res1.code === 200) {
+//       //       articles = res1.data;
+//       // } else {
+//       //       console.log("个人中心获取文章列表失败：", res1);
+//       // }
 
-      const res2 = await getCenterInfo(id)
-      // if (res2.code === 200) {
-      //       framerInfo = res2.data;
-      // } else {
-      //       console.log("获取用户数据失败：", res2);
-      // }
-      return { articles, framerInfo };
+//       const res2 = await getCenterInfo(id)
+//       // if (res2.code === 200) {
+//       //       framerInfo = res2.data;
+//       // } else {
+//       //       console.log("获取用户数据失败：", res2);
+//       // }
+//       return { articles, framerInfo };
+// }
+
+export const getServerSideProps: GetServerSideProps<{
+      articles: Array<ArticleInfoModel>
+      framerInfo: FramerInfoModel
+}> = async ({ params }: { params: { id: string } }) => {
+      const id = params.id;
+      const res = await fetch(`http://localhost:8080/blog/article/center/${id}`)
+      const articles = (await res.json()).data
+      const res1 = await fetch(`http://localhost:8080/blog/framer/getCenterInfo/${id}`)
+      const framerInfo = (await res1.json()).data
+
+
+
+      return {
+            props: {
+                  articles, framerInfo
+            }
+      }
 }
-
-export default Center;

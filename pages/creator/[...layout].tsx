@@ -4,13 +4,16 @@
 
 import dynamic from 'next/dynamic';
 
-import styles from '../../styles/creator.module.css'
+import styles from '../../styles/creator.module.scss'
 import Header from "../../components/creator/Header";
 import SideBar from "../../components/creator/SideBar"
 import Head from 'next/head';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType, NextApiRequest } from 'next';
 import { MenuKeyPath } from './data';
 import { useEffect, useState } from 'react';
+import { NextRequest, NextResponse } from 'next/server';
+import showLoginModel from 'utils/showLoginModel';
+import middleware from 'middleware';
 
 
 //首页
@@ -46,11 +49,16 @@ const contentListNoTitle: Record<string, React.ReactNode> = {
       '/tool/import/self': <ToolImportSelf />
 };
 
-export default function Creator({ defaultSelectedKeys, pathName }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Creator({ defaultSelectedKeys, pathName, isLogin }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
       const [children, setChildren] = useState<React.ReactNode>()
       useEffect(() => {
-            console.log('xxx', defaultSelectedKeys);
+            console.log(isLogin);
+
+            if (isLogin === 'false') {
+                  showLoginModel()
+            }
+
             setChildren(contentListNoTitle[pathName])
       }, [defaultSelectedKeys, pathName])
 
@@ -75,17 +83,22 @@ export default function Creator({ defaultSelectedKeys, pathName }: InferGetServe
 
 export const getServerSideProps: GetServerSideProps<{
       defaultSelectedKeys: Array<string>,
-      pathName: string
-}> = async ({ params }: { params: { layout: Array<string> } }) => {
-      const pathName = '/' + params.layout.join('/')
-      const defaultSelectedKeys = [MenuKeyPath[pathName]]
-      console.log('defaultSelectedKeys', defaultSelectedKeys);
-      console.log('pathName', pathName);
+      pathName: string,
+      isLogin: string
+}> = async ({ params, req }: { params: { layout: Array<string> }, req: any }) => {
+      let pathName = ""
+      let defaultSelectedKeys = [""]
+
+      if (req.headers.islogin === "true") {
+            pathName = '/' + params.layout.join('/')
+            defaultSelectedKeys = [MenuKeyPath[pathName] as string]
+      }
 
       return {
             props: {
                   defaultSelectedKeys,
-                  pathName
+                  pathName,
+                  isLogin: req.headers.islogin
             }
       }
 }

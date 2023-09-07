@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons'
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router'
 
-import styles from '../../../styles/creator.module.css'
+import styles from '../../../styles/creator.module.scss'
 import BlogList from '../BlogList'
 
 

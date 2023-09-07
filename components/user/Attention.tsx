@@ -1,7 +1,7 @@
 import React from 'react'
 import { Divider, List, Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
-import styles from '../../styles/Attention.module.css'
+import styles from '../../styles/Attention.module.scss'
 import { getFollowListByFramerId } from '../../config/getRequest'
 import { useState } from 'react'
 import { useEffect } from 'react'

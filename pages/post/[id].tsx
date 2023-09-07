@@ -12,10 +12,12 @@ import Header from "../../components/other/Header";
 import Author from "../../components/other/Author";
 import Advert from "../../components/other/Advert";
 import Footer from "../../components/other/Footer";
-import styles from "../../styles/Detailed.module.css";
+import styles from "../../styles/Detailed.module.scss";
 import { ArticleCardIcon, ArticleCardIconOtherColor } from '../../utils/icon.js'
 import { processFormat } from '../../utils/numerProcess'
 import { ArticleDetailModel, DetailRelateModel } from "model/ResponseModel";
+import Comment from "components/comment/Comment";
+import CommentInput from "components/comment/CommentInput";
 
 export default function Detailed({ info }: InferGetServerSidePropsType<typeof getServerSideProps>) {
       const [isAttention, setIsAttention] = useState<boolean>(false);
@@ -82,15 +84,17 @@ export default function Detailed({ info }: InferGetServerSidePropsType<typeof ge
                   <Row className="comm-main" justify="center">
                         <div style={{ position: 'fixed', top: '20%', left: '4%' }}>
                               <Space size="large" direction="vertical">
-                                    <Badge count={processFormat(info.likeCount)} overflowCount={10000000}>
+                                    <Badge count={processFormat(info?.likeCount)} overflowCount={10000000}>
                                           <Avatar size={48} icon={
                                                 isLike ? <ArticleCardIconOtherColor type='icon-dianzan' /> : <ArticleCardIcon type='icon-dianzan_kuai' />
                                           } className="panelBtn" onClick={like} />
                                     </Badge>
-                                    <Badge count={processFormat(info.commentCount)} overflowCount={10000000}>
-                                          <Avatar size={48} icon={<ArticleCardIcon type='icon-pinglun1' />} className="panelBtn" />
+                                    <Badge count={processFormat(info?.commentCount)} overflowCount={10000000}>
+                                          <a href="#comment">
+                                                <Avatar size={48} icon={<ArticleCardIcon type='icon-pinglun1' />} className="panelBtn" />
+                                          </a>
                                     </Badge>
-                                    <Badge count={processFormat(info.collectCount)} overflowCount={10000000}>
+                                    <Badge count={processFormat(info?.collectCount)} overflowCount={10000000}>
                                           <Avatar size={48} icon={
                                                 isCollect ? <ArticleCardIconOtherColor type='icon-shoucangxuanzhong' /> : <ArticleCardIcon type='icon-shoucang' />
                                           } className="panelBtn" onClick={collect} />
@@ -105,23 +109,23 @@ export default function Detailed({ info }: InferGetServerSidePropsType<typeof ge
                         </div>
                         <Col className="comm-left" xs={24} sm={24} md={16} lg={18} xl={13} style={{ padding: '35px' }}>
                               <h1 className={styles.detailed_title}>
-                                    {info.title}
+                                    {info?.title}
                               </h1>
                               <div className={styles.authorInfoBlock} style={{ marginTop: '20px', marginBottom: '20px' }}>
                                     <a href="">
-                                          <Avatar src={info.framerAvatar} size="large" style={{ marginRight: '8px' }} />
+                                          <Avatar src={info?.framerAvatar} size="large" style={{ marginRight: '8px' }} />
                                     </a>
                                     <div className={styles.authorInfoBox}>
                                           <div className={styles.authorName}>
-                                                {info.framerName}
+                                                {info?.framerName}
                                           </div>
                                           <div className={styles.metaBox}>
                                                 <span style={{ marginRight: '10px' }}>
-                                                      {info.updateTime}
+                                                      {info?.updateTime}
                                                 </span>
                                                 •&nbsp;&nbsp;
                                                 <span>
-                                                      阅读 {info.viewCount}
+                                                      阅读 {info?.viewCount}
                                                 </span>
                                           </div>
                                     </div>
@@ -130,9 +134,10 @@ export default function Detailed({ info }: InferGetServerSidePropsType<typeof ge
                                     dangerouslySetInnerHTML={{ __html: html }}
                               >
                               </div>
+
                         </Col>
                         <Col xs={0} sm={0} md={7} lg={5} xl={5}>
-                              <Author framerP={info.framerId} framerName={info.framerName} framerAvatar={info.framerAvatar} />
+                              <Author framerP={info?.framerId} framerName={info?.framerName} framerAvatar={info?.framerAvatar} />
                               <Advert />
                               <Affix offsetTop={5}>
                                     <div className={styles.detailed_nav + " " + "comm-box"}>
@@ -142,6 +147,13 @@ export default function Detailed({ info }: InferGetServerSidePropsType<typeof ge
                               </Affix>
                         </Col>
                   </Row>
+                  <Row className="comm-main" justify="center" id="comment">
+                        <Col className="comm-left" xs={24} sm={24} md={16} lg={18} xl={13} style={{ padding: '35px' }}>
+                              <Comment articleId={info.id} />
+                        </Col>
+                        <Col xs={0} sm={0} md={7} lg={5} xl={5}>
+                        </Col>
+                  </Row >
                   <Footer />
             </>
       );

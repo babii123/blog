@@ -1,23 +1,16 @@
 import React from 'react';
-import { useState } from 'react'
 import { Button } from 'antd';
 import { HeartOutlined, SmileOutlined } from '@ant-design/icons'
-import styles from '../../styles/Login.module.css'
-import Login from './Login'
+import styles from '../../styles/Login.module.scss'
 import Register from './Register'
 import NiceModal from '@ebay/nice-modal-react';
+import showLoginModel from "../../utils/showLoginModel"
 
 
 const LoginMsg: React.FC = () => {
-      // const [isOpen1, setIsOpen1] = useState(false)
-      // const [isOpen2, setIsOpen2] = useState(false)
 
       const showLogin = () => {
-            NiceModal.show(Login).then((res) => {
-                  console.log(res);
-            }, err => {
-                  console.log(err);
-            })
+            showLoginModel()
       }
 
       const showRegister = () => {

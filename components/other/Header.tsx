@@ -1,35 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/router'
-import styles from "../../styles/header.module.css";
+import styles from "../../styles/header.module.scss";
 import { Row, Col, Menu, Avatar, Space, Dropdown, Popover, Button, Affix } from "antd";
 import { BellFilled, CaretDownOutlined, } from "@ant-design/icons"
 import { getTypeList } from "../../config/getRequest";
 
 import LoginMsg from "./LoginMsg";
 import { TypeModel } from "model/ResponseModel";
+import HeaderContent from "./HeaderContent";
 
 const Header: React.FC = () => {
   const [navArray, setNavArray] = useState<Array<TypeModel>>([])
-  const [token, setToken] = useState<string>()
-  const [framer_img, setframerImg] = useState<string>()
-  const [framer_id, setframerId] = useState<string>()
+  const [token, setToken] = useState<string>("")
+  const [framer_img, setframerImg] = useState<string>("")
+  const [framer_id, setframerId] = useState<string>("")
 
-  // const items = [
-  //   {
-  //     label: '写文章',
-  //     key: '1',
-  //     // icon: <FormOutlined />
-  //   },
-  //   {
-  //     label: '草稿箱',
-  //     key: '2',
-  //     // icon: <Icon component={Drafts} />
-  //   },
-  // ]
   const title = "登录即享以下权益"
   const content = (
     <LoginMsg />
   )
+  const content1 = (
+    <HeaderContent />
+  );
   // 获取文章类型，导航栏数据
   const fetchData = async () => {
     getTypeList().then(res => {
@@ -55,29 +47,25 @@ const Header: React.FC = () => {
     // 初始化文章类型
     fetchData()
     // 初始化
-    // setframerId(loclStorage.getItem("framer_img"))
+    setframerId(localStorage.getItem("framer_id") || "")
+    setframerImg(localStorage.getItem("framer_img") || "")
   }, [])
   // 切换类型 
   const [current, setCurrent] = useState('/');
   const router = useRouter()
-  const handleClick = (e) => {
+  const handleClick = (e: any) => {
     setCurrent(e.key as string)
     if (e.key == '/') {
-      console.log('/');
       router.push('/')
     }
     else {
-      console.log('/' + e.key);
-      router.push('/' + e.key).then(res => {
-        // router.reload()
-      })
-
+      router.push('/' + e.key)
     }
   }
   // 点击创作者中心按钮 
   const enterCreator = () => {
     if (framer_id !== null) {
-      window.open("/creator")
+      window.open("/creator/home")
     }
   }
   //创作者中心的下拉菜单
@@ -101,8 +89,11 @@ const Header: React.FC = () => {
   function LogOut() {
     localStorage.removeItem("framer_id")
     localStorage.removeItem("framer_img")
+    setframerId("")
+    setframerImg("")
     location.reload()
   }
+
   return (
     <div className={styles.header}>
       <Row justify="center">
@@ -117,28 +108,35 @@ const Header: React.FC = () => {
         <Col xs={0} sm={0} md={5} lg={10} xl={5} offset={5} style={{ paddingTop: '10px' }}>
           <Space size={25} wrap>
             <div>
-              <Dropdown.Button type="primary" icon={<CaretDownOutlined />} onClick={enterCreator}>
-                创作者中心
-              </Dropdown.Button>
+              <Button type="primary" onClick={() => enterCreator()} style={{ borderTopRightRadius: '0', borderBottomRightRadius: '0', padding: 'none 5px' }}>
+                <div>创作者中心</div>
+              </Button>
+              <Popover content={content1} title="Title">
+                <Button type="primary" style={{ borderTopLeftRadius: '0', borderBottomLeftRadius: '0', paddingLeft: '5px', paddingRight: '5px', borderLeft: '1px solid hsla(0,0%,100%,.1)' }}><CaretDownOutlined /></Button>
+              </Popover>
             </div>
-            <BellFilled style={{ fontSize: '24px' }} />
-            {
-              framer_id == null ?
-                <Popover
-                  placement="bottomRight"
-                  title={title}
-                  content={content}
-                  zIndex={1000}
-                >
-                  <Button>  登录 | 注册  </Button>
-                </Popover>
-                :
-                <Dropdown menu={{ items }} placement="bottom" arrow={{ pointAtCenter: true }}>
-                  <a href={"/user/" + framer_id} target="_blank">
-                    <Avatar src={framer_img} size="large" style={{ marginRight: '8px' }} />
-                  </a>
-                </Dropdown>
-            }
+            <div>
+              <BellFilled style={{ fontSize: '24px' }} />
+            </div>
+            <div>
+              {
+                framer_id === "" ?
+                  <Popover
+                    placement="bottomRight"
+                    title={title}
+                    content={content}
+                    zIndex={1000}
+                  >
+                    <Button>  登录 | 注册  </Button>
+                  </Popover>
+                  :
+                  <Dropdown menu={{ items }} placement="bottom" arrow={{ pointAtCenter: true }}>
+                    <a href={"/user/" + framer_id} target="_blank">
+                      <Avatar src={framer_img} size="large" style={{ marginRight: '8px' }} />
+                    </a>
+                  </Dropdown>
+              }
+            </div>
           </Space>
         </Col>
       </Row>

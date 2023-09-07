@@ -2,11 +2,11 @@ import React from 'react';
 import { Button, Modal, Input, Space, Spin, message } from 'antd';
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
 import { useState } from 'react';
-import { userLogin } from '../../config/getRequest'
+import { userLogin } from '../../config/handleRequest'
 import Router from 'next/router';
 import NiceModal, { useModal } from "@ebay/nice-modal-react"
 
-const Login: React.FC = NiceModal.create(() => {
+const Login = NiceModal.create(() => {
       const [phone, setPhone] = useState("Lvzl")
       const [password, setPassword] = useState("1234")
       const [isLoading, setIsLoading] = useState(false)
@@ -26,11 +26,11 @@ const Login: React.FC = NiceModal.create(() => {
             };
             setIsLoading(true);
             userLogin(userData).then((res) => {
-                  console.log(res.data.code);
-                  if (res.data.code === 200) {
+                  if (res.code === 200) {
                         message.success("登录成功");
-                        // localStorage.setItem("token", res.data.data.token);
-                        // localStorage.setItem("framer_img", res.data.data.framerImg);
+                        localStorage.setItem("token", res.data.token);
+                        localStorage.setItem("framer_id", res.data.framerId);
+                        localStorage.setItem("framer_img", res.data.framerImg);
                         location.reload()
                         modal.hide();
                   } else {

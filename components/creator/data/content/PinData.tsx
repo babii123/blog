@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Router from 'next/router'
 
-import styles from '../../../../styles/creator.module.css'
+import styles from '../../../../styles/creator.module.scss'
 import StatisticEntire from '../../StatisticEntire';
 import { CountDataModel, CountList } from './type'
 

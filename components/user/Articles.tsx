@@ -1,28 +1,31 @@
 import React from 'react'
 import { processFormat } from '../../utils/numerProcess'
 import { EyeOutlined, LikeOutlined } from "@ant-design/icons";
-import styles from '../../styles/Center.module.css'
+import styles from '../../styles/Center.module.scss'
 import { List, Divider, Empty, Dropdown, message } from 'antd';
 import Tocify from '../tocify';
 import { marked } from "marked";
 import { ArticleCardIcon } from '../../utils/icon'
 import { useState } from 'react';
-import { delArticle, getArticleListByFramerId } from '../../config/getRequest'
+import { getArticleListByFramerId } from '../../config/getRequest'
+import { delArticle } from '../../config/handleRequest'
+import { ArticleInfoModel } from 'model/ResponseModel';
+import hljs from 'highlight.js';
 
-const Articles = ({ articles }) => {
+const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles }) => {
 
       const [articleList, setArticleList] = useState(articles)
       const tocify = new Tocify();
 
       const renderer = new marked.Renderer();
-      renderer.heading = function (text, level, raw) {
+      renderer.heading = function (text: any, level: any, raw: any) {
             const anchor = tocify.add(text, level);
             return `<a id="${anchor} href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
       };
 
       marked.setOptions({
             renderer,
-            highlight: function (code, lang) {
+            highlight: function (code: any, lang: any) {
                   return hljs.highlightAuto(code).value;
             },
             langPrefix: "hljs language-", // highlight.js css expects a top-level 'hljs' class.
@@ -43,7 +46,7 @@ const Articles = ({ articles }) => {
                   label: (<div onClick={edit}>编辑</div>)
             },
       ]
-      const [id, setId] = useState()
+      const [id, setId] = useState<string>()
       function del() {
             delArticle(id).then(res => {
                   if (res.code === 200) {
@@ -59,7 +62,7 @@ const Articles = ({ articles }) => {
             console.log(id);
             window.open(`/editor/drafts/${id}`)
       }
-      const getId = (id) => {
+      const getId = (id: string) => {
             // event.stopPropagation();
             console.log(id);
             setId(id)
@@ -76,7 +79,6 @@ const Articles = ({ articles }) => {
                                     dataSource={articleList || null}
                                     renderItem={(item) => (
                                           <List.Item style={{ display: 'block' }}>
-
                                                 <div style={{ color: '#8a919f' }}>
                                                       <a
                                                             href={`/type/${item.framerId || ""}`}
@@ -119,7 +121,7 @@ const Articles = ({ articles }) => {
                                                       </span>
                                                       <span className={styles.itemIcon} >
                                                             <Dropdown menu={{ items }} placement="bottom" arrow trigger={['click']}>
-                                                                  <span onClick={(e) => getId(item.id, e)}>...</span>
+                                                                  <span onClick={(e) => getId(item.id)}>...</span>
                                                             </Dropdown>
                                                       </span>
                                                 </div>
