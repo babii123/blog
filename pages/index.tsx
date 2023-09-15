@@ -6,6 +6,7 @@ import { GetAritcleListModel } from "model/ResponseModel";
 import { useEffect, useState } from "react";
 import { getAritcleList, getArticleCount } from "config/getRequest";
 import Head from "next/head";
+import { setCookie } from "cookies-next";
 
 export default function Home() {
   const url = "/article"
@@ -30,10 +31,9 @@ export default function Home() {
         console.log("获取文章总数失败：" + res);
       }
     })
-    console.log("count", count);
-    console.log("data", data);
-
-  })
+    // console.log("count", count);
+    // console.log("data", data);
+  }, [])
 
   return (
     <>

@@ -11,7 +11,7 @@ import NiceModal from "@ebay/nice-modal-react";
 import Head from "next/head";
 
 export default function Type({ url, countUrl, headName }:
-       InferGetServerSidePropsType<typeof getServerSideProps>) {
+      InferGetServerSidePropsType<typeof getServerSideProps>) {
       const [data, setData] = useState<Array<GetAritcleListModel>>()
       const [count, setCount] = useState<number>()
 

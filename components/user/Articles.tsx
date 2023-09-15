@@ -1,41 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { processFormat } from '../../utils/numerProcess'
 import { EyeOutlined, LikeOutlined } from "@ant-design/icons";
 import styles from '../../styles/Center.module.scss'
 import { List, Divider, Empty, Dropdown, message } from 'antd';
-import Tocify from '../tocify';
-import { marked } from "marked";
 import { ArticleCardIcon } from '../../utils/icon'
 import { useState } from 'react';
 import { getArticleListByFramerId } from '../../config/getRequest'
 import { delArticle } from '../../config/handleRequest'
 import { ArticleInfoModel } from 'model/ResponseModel';
-import hljs from 'highlight.js';
 
 const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles }) => {
 
       const [articleList, setArticleList] = useState(articles)
-      const tocify = new Tocify();
-
-      const renderer = new marked.Renderer();
-      renderer.heading = function (text: any, level: any, raw: any) {
-            const anchor = tocify.add(text, level);
-            return `<a id="${anchor} href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
-      };
-
-      marked.setOptions({
-            renderer,
-            highlight: function (code: any, lang: any) {
-                  return hljs.highlightAuto(code).value;
-            },
-            langPrefix: "hljs language-", // highlight.js css expects a top-level 'hljs' class.
-            pedantic: false,
-            gfm: true,
-            breaks: false,
-            sanitize: false,
-            tables: true,
-            smartLists: true,
-      });
       const items = [
             {
                   key: '1',
@@ -46,7 +22,7 @@ const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles })
                   label: (<div onClick={edit}>编辑</div>)
             },
       ]
-      const [id, setId] = useState<string>()
+      const [id, setId] = useState<string>("")
       function del() {
             delArticle(id).then(res => {
                   if (res.code === 200) {
@@ -63,10 +39,13 @@ const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles })
             window.open(`/editor/drafts/${id}`)
       }
       const getId = (id: string) => {
-            // event.stopPropagation();
             console.log(id);
             setId(id)
       }
+      useEffect(() => {
+            setArticleList(articles)
+      }, [articles])
+
       return (
             <>
                   {
@@ -75,7 +54,7 @@ const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles })
                               <Empty style={{ paddingTop: '20px', paddingBottom: '20px', margin: 0, backgroundColor: '#fff', width: '100%' }} />
                               :
                               <List
-                                    style={{ backgroundColor: '#fff' }}
+                                    style={{ backgroundColor: '#fff', padding: '1rem' }}
                                     dataSource={articleList || null}
                                     renderItem={(item) => (
                                           <List.Item style={{ display: 'block' }}>
@@ -90,7 +69,7 @@ const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles })
                                                             </span>
                                                       </a>
                                                       <Divider type="vertical" />
-                                                      {item.updateTime || ""}
+                                                      {item.updateTime.toLocaleString() || ""}
                                                       <Divider type="vertical" />
                                                       {item.typeName || ""}
                                                 </div>
@@ -104,7 +83,7 @@ const Articles: React.FC<{ articles: Array<ArticleInfoModel> }> = ({ articles })
                                                       </a>
                                                 </div>
                                                 <div className="list-context"
-                                                      dangerouslySetInnerHTML={{ __html: marked(item.introduce || "") }}
+                                                      dangerouslySetInnerHTML={{ __html: (item.introduce || "") }}
                                                 ></div>
                                                 <div>
                                                       <span className={styles.itemIcon}>

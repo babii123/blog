@@ -7,15 +7,12 @@ import { useEffect } from 'react';
 import { Row, Col, List, FloatButton, Affix, Tabs, Pagination, Divider } from "antd";
 import Advert from "./Advert";
 import styles from '../../styles/index.module.scss'
-import Tocify from '../tocify';
-import { marked } from "marked";
 import { useState } from 'react';
 import { ArticleCardIcon } from '../../utils/icon.js'
 import { processFormat } from '../../utils/numerProcess'
 import { GetAritcleListModel } from '../../model/ResponseModel'
 
 import { getArticleCount, getAritcleList } from '../../config/getRequest'
-import hljs from 'highlight.js';
 
 interface PropsModel {
       url: string,
@@ -58,32 +55,7 @@ const DataList: React.FC<PropsModel> = (props) => {
             // appendData(current, pageSize);
             // getCount();
       }, [props]);
-      const tocify = new Tocify();
 
-      const renderer = new marked.Renderer();
-      renderer.heading = function (text: string, level: number) {
-            const anchor = tocify.add(text, level);
-            return `<a id="${anchor} href="#${anchor}" class="anchor-fix"><h${level}>${text}</h${level}></a>\n`;
-      };
-
-      marked.setOptions({
-            renderer,
-            highlight: function (code: string, lang: any) {
-                  // return hljs.highlightAuto(code).value;
-                  const hljs = require("highlight.js");
-                  const language = hljs.getLanguage(lang) ? lang : "plaintext";
-                  return hljs.highlight(code, { language }).value;
-            },
-            langPrefix: "hljs language-", // highlight.js css expects a top-level 'hljs' class.
-            pedantic: false,
-            gfm: true,
-            breaks: false,
-            sanitize: false,
-            // smartypants: false,
-            // xhtml: false,
-            tables: true,
-            smartLists: true,
-      });
       const onChange = (page: number, pageSize: number) => {
             setCurrent(page)
             appendData(page, pageSize)
@@ -121,7 +93,7 @@ const DataList: React.FC<PropsModel> = (props) => {
                                                       </a>
                                                 </div>
                                                 <div className="list-context"
-                                                      dangerouslySetInnerHTML={{ __html: marked(item.introduce) }}
+                                                      dangerouslySetInnerHTML={{ __html: item.introduce }}
                                                 ></div>
                                                 <div>
                                                       <span className={styles.itemIcon}>

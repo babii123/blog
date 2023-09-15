@@ -10,6 +10,7 @@ import type { TabsProps } from 'antd';
 
 import { CountDataModel } from './type'
 import dynamic from 'next/dynamic';
+import MyCharts from '../MyCharts';
 
 interface PropsModel {
       type: string,
@@ -142,7 +143,7 @@ const ContentArticleMain: React.FC<PropsModel> = ({ type, myChart }) => {
                         {children}
                         <h2 style={{ margin: '20px 0' }}>数据趋势</h2>
                         <Tabs defaultActiveKey="entire" items={items} onChange={onChange} />
-                        {/* <MyCharts /> */}
+                        <MyCharts />
                   </Card>
             </>
       );

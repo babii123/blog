@@ -6,8 +6,10 @@ import styles from "../../styles/Author.module.scss";
 
 import { ArticleCardIcon } from '../../utils/icon'
 import { getFramerCardInfo } from "../../config/getRequest";
-import { clickAttention } from "../../config/handleRequest";
+import { addPrivateMsgLinkMan, clickAttention } from "../../config/handleRequest";
 import { AuthorCardModel } from "../../model/ResponseModel"
+import Router from "next/router";
+import { PrivateMsgLinkManParam } from "model/ParamsModel";
 
 interface PropsModel {
   framerP: string,
@@ -20,14 +22,30 @@ const initInfo: AuthorCardModel = {
   beLiked: 0,
   beViewed: 0,
 }
+const valueStyle = {
+  fontSize: '14px',
+  color: "#252933",
+  fontWeight: 400
+}
+
+const iconStyle = {
+  fontSize: '16px',
+  color: '#7bb9ff',
+  backgroundColor: '#e1efff',
+  borderRadius: '50%',
+  padding: '6px'
+}
+
 
 export default function Author(props: PropsModel) {
   const { framerP, framerName, framerAvatar } = props
   const [info, setInfo] = useState<AuthorCardModel>(initInfo);
   const [isAttention, setIsAttention] = useState<boolean>()
   const likeText = ""
+
+
   const getInfo = () => {
-    const framerI = "1"
+    const framerI = localStorage.getItem("framer_id") || ""
     getFramerCardInfo(framerI, framerP).then(res => {
       if (res.code === 200) {
         setInfo(res.data)
@@ -49,6 +67,26 @@ export default function Author(props: PropsModel) {
         console.log("关注失败", res);
       }
     })
+  }
+  // 点击私信
+  // const router = useRouter()
+  const toPrivateMsg = () => {
+    // 先为 联系人关系 入库，
+    const params: PrivateMsgLinkManParam = {
+      userId: localStorage.getItem("framer_id") || "",
+      friendId: framerP,
+      userName: framerName,
+      avatar: framerAvatar,
+      constatus: 0,
+      needInit: 0,
+      placeTop: 0
+    }
+
+    addPrivateMsgLinkMan(params).then(res => {
+      console.log(res);
+    })
+
+    Router.push({ pathname: "/notification/im", query: { participantId: framerP } })
   }
   return (
     <Card style={{ marginBottom: '8px' }}>
@@ -77,25 +115,33 @@ export default function Author(props: PropsModel) {
             }
           </div>
           <div style={{ flex: 1 }}>
-            <Button type="primary" ghost block size={"large"} style={{ backgroundColor: '#f4f9ff', color: '#1e80ff', borderColor: '#b3d5ff' }}>私信</Button>
+            <Button type="primary" ghost block
+              size={"large"}
+              style={{
+                backgroundColor: '#f4f9ff',
+                color: '#1e80ff',
+                borderColor: '#b3d5ff'
+              }}
+              onClick={() => toPrivateMsg()}
+            >私信</Button>
           </div>
         </div>
       </div>
       <Divider />
       <div style={{ marginBottom: '8px', display: 'flex' }}>
         <span style={{ flex: 1 }}>
-          <LikeFilled style={{ fontSize: '16px', color: '#7bb9ff', backgroundColor: '#e1efff', borderRadius: '50%', padding: '6px' }} />
+          <LikeFilled style={iconStyle} />
         </span>
         <span style={{ flex: 6 }}>
-          <Statistic prefix="获得点赞:" value={info.beLiked} valueStyle={{ fontSize: '14px', color: "#252933", fontWeight: 400 }} />
+          <Statistic prefix="获得点赞:" value={info.beLiked} valueStyle={valueStyle} />
         </span>
       </div>
       <div style={{ marginBottom: '8px', display: 'flex' }}>
         <span style={{ flex: 1 }}>
-          <EyeFilled style={{ fontSize: '16px', color: '#7bb9ff', backgroundColor: '#e1efff', borderRadius: '50%', padding: '6px' }} />
+          <EyeFilled style={iconStyle} />
         </span>
         <span style={{ flex: 6 }}>
-          <Statistic prefix="文章被阅读:" value={info.beViewed} valueStyle={{ fontSize: '14px', color: "#252933", fontWeight: 400 }} />
+          <Statistic prefix="文章被阅读:" value={info.beViewed} valueStyle={valueStyle} />
         </span>
       </div>
     </Card>

@@ -89,11 +89,11 @@ export interface ArticleCountModel {
 }
 
 export interface ArticleEditModel {
-      id: number,
-      title: number,
-      articleContent: number,
-      typeId: number,
-      introduce: number,
+      id: string,
+      title: string,
+      articleContent: string,
+      typeId: string,
+      introduce: string,
 }
 
 export interface FramerEditModel {
@@ -130,4 +130,21 @@ export interface CommentItem{
       beReplyCount: string,
       beLikeCount: string
       beLike: boolean
+}
+
+export interface PrivateMsg{
+      id: number,
+      senderId: string,
+      receiverId: string,
+      messageType: number,
+      messageContent: string,
+      sendTime: Date,
+      status: number,
+}
+
+export interface AttentionFramerModel{
+      framerId: string,
+      framerAvatar: string,
+      framerName: string,
+      introduce: string
 }

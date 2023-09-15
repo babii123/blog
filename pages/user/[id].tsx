@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { Row, Col, Avatar, Button, Menu, Divider, Statistic } from 'antd'
+import { Row, Col, Avatar, Button, Menu, Divider, Statistic, MenuProps } from 'antd'
 import { LikeFilled, EyeFilled, MailFilled, PlusOutlined } from "@ant-design/icons";
 import styles from '../../styles/Center.module.scss'
 import Header from '../../components/other/Header'
@@ -12,7 +12,7 @@ import { useRouter } from 'next/router';
 import { ArticleCardIcon } from '../../utils/icon'
 import { getCenterInfo, getArticleListByFramerId, getLikeListByFramerId } from '../../config/getRequest'
 import { ArticleInfoModel, FramerInfoModel } from 'model/ResponseModel';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 
 const items = [
@@ -38,24 +38,25 @@ export default function Center({ articles, framerInfo }: InferGetServerSideProps
       const [articleList, setArticleList] = useState<Array<ArticleInfoModel>>(articles);
       const [framer, setFramer] = useState(framerInfo);
       const [framerId, setFramerId] = useState<string>();
-      // const [attentionList, setAttentionList] = useState(articleList);
       // 切换 
       const router = useRouter()
       const { id } = router.query
-      const handleClick = (e) => {
+      const handleClick: MenuProps['onClick'] = (e) => {
             console.log(id);
             // 修改数据
             if (e.key === 'article') {
-                  getArticleListByFramerId(id).then(res => {
+                  getArticleListByFramerId(id as string).then(res => {
                         if (res.code === 200) {
+                              setCurrent(e.key)
                               setArticleList(res.data)
                         } else {
                               console.log("个人中心获取文章列表失败：", res);
                         }
                   })
             } else if (e.key === 'like') {
-                  getLikeListByFramerId(id).then(res => {
+                  getLikeListByFramerId(id as string).then(res => {
                         if (res.code === 200) {
+                              setCurrent(e.key)
                               setArticleList(res.data)
                         } else {
                               console.log("个人中心获取文章列表失败：", res);
@@ -66,14 +67,13 @@ export default function Center({ articles, framerInfo }: InferGetServerSideProps
       }
       useEffect(() => {
             setFramerId(localStorage.getItem("framer_id") || "")
-            console.log(framer);
       })
       return (
             <>
                   <Head>
                         <title>个人主页</title>
                   </Head>
-                  <Header/>
+                  <Header />
                   <Row className="comm-main" justify="center">
                         <Col xs={24} sm={24} md={16} lg={18} xl={14} style={{ marginRight: '8px' }}>
                               <div className={styles.authorInfoBlock} >
@@ -123,10 +123,10 @@ export default function Center({ articles, framerInfo }: InferGetServerSideProps
                               <div>
                                     <Menu mode="horizontal" items={items} style={{ fontSize: '16px' }} onClick={(e) => handleClick(e)} selectedKeys={[current]} />
                                     {
-                                          current === "article" ?
-                                                (<ArticlesList articles={articleList} />)
+                                          current === "attention" ?
+                                                (<Attention id={id as string} />)
                                                 :
-                                                (current === "like" ? (<ArticlesList articles={articleList} />) : (<Attention id={id} />))
+                                                (<ArticlesList articles={articleList} />)
                                     }
                               </div>
 
@@ -178,7 +178,7 @@ export default function Center({ articles, framerInfo }: InferGetServerSideProps
                                     <Divider />
                                     <Link href="">
                                           <span className={styles.itemsTitle}>加入于</span>
-                                          <span className={styles.itemsCount}>{framer.registerTime}</span>
+                                          <span className={styles.itemsCount}>{framer.registerTime.toString()}</span>
                                     </Link>
                                     <Divider />
                               </div>
@@ -217,8 +217,6 @@ export const getServerSideProps: GetServerSideProps<{
       const articles = (await res.json()).data
       const res1 = await fetch(`http://localhost:8080/blog/framer/getCenterInfo/${id}`)
       const framerInfo = (await res1.json()).data
-
-
 
       return {
             props: {

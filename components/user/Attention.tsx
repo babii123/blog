@@ -3,11 +3,15 @@ import { Divider, List, Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import styles from '../../styles/Attention.module.scss'
 import { getFollowListByFramerId } from '../../config/getRequest'
-import { useState } from 'react'
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
+import { AttentionFramerModel } from 'model/ResponseModel'
 
-const Attention = ({ id }) => {
-  const [data, setData] = useState([])
+interface PropsModel {
+  id: string
+}
+
+const Attention: React.FC<PropsModel> = ({ id }) => {
+  const [data, setData] = useState<Array<AttentionFramerModel>>([])
   // const data = [
   //   'Racing car sprays burning fuel into crowd.',
   //   'Japanese princess to wed commoner.',
@@ -15,7 +19,7 @@ const Attention = ({ id }) => {
   //   'Man charged over missing wedding girl.',
   //   'Los Angeles battles huge wildfires.',
   // ];
-  const onChange = (key) => {
+  const onChange = (key: string) => {
     console.log(key);
   };
   const getFollow = async () => {

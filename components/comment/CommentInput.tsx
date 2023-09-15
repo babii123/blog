@@ -14,8 +14,8 @@ const CommentInput: React.FC<
             articleId: string,
             loadComment: Function,
             type: string,
-            replyCommentId?: number,
-            topCommentId?: number
+            replyCommentId: number,
+            topCommentId: number
       }
 > = ({ articleId, loadComment, type, replyCommentId, topCommentId }) => {
 

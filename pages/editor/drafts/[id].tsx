@@ -2,9 +2,9 @@
  * @description 编辑文章
  */
 import { useEffect, useState } from 'react';
-import { Col, Row, Input, Button, Select, Modal, message } from 'antd';
-import { nanoid } from 'nanoid'
-import { getArticle, editArticle } from '../../../config/getRequest';
+import { Col, Row, Input, Button, Select, Modal, message, Avatar, Space } from 'antd';
+import { getArticle } from 'config/getRequest';
+import { editArticle } from 'config/handleRequest'
 import { useRouter } from 'next/router';
 // import gfm from '@bytemd/plugin-gfm'
 import breaks from '@bytemd/plugin-breaks'
@@ -21,6 +21,12 @@ import 'highlight.js/styles/vs.css'
 // placed after highlight styles to override `code` padding
 import 'katex/dist/katex.css'
 import { Editor, Viewer } from '@bytemd/react'
+import { NextPage } from 'next';
+import Head from 'next/head';
+import { BytemdPlugin } from 'bytemd';
+import { AddArticleParam } from 'model/ParamsModel';
+import avatar from 'antd/es/avatar';
+import ChangeMode from 'components/icons/ChangeMode';
 
 const { TextArea } = Input;
 
@@ -28,18 +34,13 @@ let mode = 'auto'
 let localeKey = 'en'
 let maxLength: number
 
-// const plugins = [
-// gfm(),
-// Add more plugins here
-// ]
-
-function stripPrefixes(obj: Record<string, any>) {
-      return Object.entries(obj).reduce((p, [key, value]) => {
-            p[key.split('/').slice(-1)[0].replace('.json', '')] = value
-            // console.log(p)
-            return p
-      }, {} as Record<string, any>)
-}
+// function stripPrefixes(obj: Record<string, any>) {
+//       return Object.entries(obj).reduce((p, [key, value]) => {
+//             p[key.split('/').slice(-1)[0].replace('.json', '')] = value
+//             // console.log(p)
+//             return p
+//       }, {} as Record<string, any>)
+// }
 
 
 let enabled = {
@@ -52,7 +53,7 @@ let enabled = {
       'medium-zoom': true,
       mermaid: true,
 }
-const plugins = [
+const plugins: BytemdPlugin[] = [
       enabled.breaks && breaks(),
       enabled.frontmatter && frontmatter(),
       enabled.gemoji && gemoji(),
@@ -62,9 +63,9 @@ const plugins = [
       enabled['medium-zoom'] && mediumZoom(),
       enabled.mermaid &&
       mermaid(),
-].filter((x) => x)
+].filter((x) => x) as BytemdPlugin[]
 
-const create: React.FC = () => {
+const create: NextPage = () => {
       // 文章id
       const [articleId, setArticleId] = useState("");
       // 文章标题
@@ -78,22 +79,27 @@ const create: React.FC = () => {
       // 控制弹窗
       const [isModalOpen, setIsModalOpen] = useState(false);
       const [confirmLoading, setConfirmLoading] = useState(false);
+      // 头像
+      const [avatar, setAvatar] = useState("")
       const router = useRouter()
       useEffect(() => {
+            setAvatar(localStorage.getItem("framer_img") || "")
+      }, [])
+      useEffect(() => {
             const a = location.href.split("/")
-            const id1 = a[a.length - 1]
-            // getArticle(id1).then(res => {
-            //       if (res.code === 200) {
-            //             console.log(res.data);
-            //             setArticleId(res.data.id)
-            //             setTitle(res.data.title)
-            //             setValue(res.data.articleContent)
-            //             setIntro(res.data.introduce)
-            //             setType(res.data.typeId)
-            //       } else {
-            //             console.log("获取失败edit", res);
-            //       }
-            // })
+            const id1 = a[a.length - 1] || ""
+            getArticle(id1).then(res => {
+                  if (res.code === 200) {
+                        console.log(res.data);
+                        setArticleId(res.data.id)
+                        setTitle(res.data.title)
+                        setValue(res.data.articleContent)
+                        setIntro(res.data.introduce)
+                        setType(res.data.typeId)
+                  } else {
+                        console.log("获取失败edit", res);
+                  }
+            })
       }, [])
 
       const showModal = () => {
@@ -102,29 +108,32 @@ const create: React.FC = () => {
 
       const handleOk = () => {
             setConfirmLoading(true);
-            let obj = {
+            let obj: AddArticleParam = {
                   id: articleId,
                   typeId: type,
-                  framerId: localStorage.getItem("framer_id"),
+                  framerId: localStorage.getItem("framer_id") || "",
                   title: title,
                   articleContent: value,
                   introduce: intro,
-                  addTime: null,
-                  updateTime: null,
+                  addTime: "",
+                  updateTime: "",
                   viewCount: 0,
                   likeCount: 0,
                   collectCount: 0,
                   commentCount: 0
             }
             console.log(obj);
-            // editArticle(obj).then(res => {
-            //       if (res.code === 200) {
-            //             message.success("修改成功")
-            //       } else {
-            //             message.error("修改失败")
-            //             console.log("修改文章失败：", res);
-            //       }
-            // })
+            editArticle(obj).then((res) => {
+                  if (res.code === 200) {
+                        message.success("修改成功")
+                        router.push("/published")
+                        message.success("发布成功")
+                  } else {
+                        message.error("修改失败")
+                        console.log("修改文章失败：", res);
+                  }
+            })
+
             setTimeout(() => {
                   setIsModalOpen(false);
                   setConfirmLoading(false);
@@ -134,8 +143,8 @@ const create: React.FC = () => {
       const handleCancel = () => {
             setIsModalOpen(false);
       };
-
-      const changeType = (value) => {
+      // 修改类型参数
+      const changeType = (value: string) => {
             setType(value)
       };
 
@@ -145,6 +154,9 @@ const create: React.FC = () => {
 
       return (
             <>
+                  <Head>
+                        <title>编辑</title>
+                  </Head>
                   <Row style={{ overflowY: 'hidden' }}>
                         <Col span={12}>
                               <Input placeholder="请输入文章标题..." bordered={false}
@@ -153,11 +165,18 @@ const create: React.FC = () => {
                                     onChange={(e) => {
                                           setTitle(e.target.value);
                                     }} />
+
                         </Col>
                         <Col span={12}>
                               <div>
-                                    <Button type="primary" size="large" onClick={showModal} style={{ position: 'fixed', right: '25px', top: '10px' }}>发 布</Button>
-                                    <Modal title="填写信息" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} confirmLoading={confirmLoading}>
+                                    <div style={{ position: 'absolute', right: '40px', top: '10px' }}>
+                                          <Space size={20}>
+                                                <Button block>草稿箱</Button>
+                                                <Button type="primary" onClick={showModal} >发 布</Button>
+                                                <ChangeMode />
+                                                <Avatar src={avatar} />
+                                          </Space>
+                                    </div>                                    <Modal title="填写信息" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} confirmLoading={confirmLoading}>
                                           <div>分类： </div>
                                           <Select
                                                 size="large"

@@ -1,8 +1,14 @@
+import { useRouter } from 'next/router'
+
 const HeaderContent: React.FC = () => {
+      const router = useRouter()
+      const toNewAticle = () => {
+            router.push("/editor/drafts/new")
+      }
       return (
             <div className="more-list">
                   <ul className="menu">
-                        <li className="item">
+                        <li className="item" onClick={toNewAticle}>
                               <div className="icon write-article"></div>
                               <div className="title">写文章</div>
                         </li>

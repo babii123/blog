@@ -3,8 +3,9 @@ import { Button, Modal, Input, Space, Spin, message } from 'antd';
 import { UserOutlined, KeyOutlined } from '@ant-design/icons'
 import { useState } from 'react';
 import { userLogin } from '../../config/handleRequest'
-import Router from 'next/router';
 import NiceModal, { useModal } from "@ebay/nice-modal-react"
+import { setCookie } from 'cookies-next';
+import { init } from 'utils/socket';
 
 const Login = NiceModal.create(() => {
       const [phone, setPhone] = useState("Lvzl")
@@ -28,33 +29,16 @@ const Login = NiceModal.create(() => {
             userLogin(userData).then((res) => {
                   if (res.code === 200) {
                         message.success("登录成功");
-                        localStorage.setItem("token", res.data.token);
                         localStorage.setItem("framer_id", res.data.framerId);
                         localStorage.setItem("framer_img", res.data.framerImg);
+                        setCookie("token", res.data.token, { maxAge: 60 * 6 * 24 })
+                        setCookie("framer_id", res.data.framerId, { maxAge: 60 * 6 * 24 })
                         location.reload()
-                        modal.hide();
+                         modal.hide();
                   } else {
                         message.error("登录失败");
                   }
             })
-            // axios({
-            //       method: "post",
-            //       data: userData,
-            //       url: servicePath.login,
-            //       withCredentials: true, //前后端共享session
-            // }).then((res) => {
-            //       console.log(123);
-            //       if (res.data.data == "登录成功") {
-            //             message.success("登录成功");
-            //             // setframerId(localStorage.setItem("framer_id", res.data.id))
-            //             localStorage.setItem("framer_id", res.data.id);
-            //             Router.replace('/');
-            //             // setIsOpen1(false)
-            //             modal.hide();
-            //       } else {
-            //             message.error("登录失败");
-            //       }
-            // });
             setTimeout(() => {
                   setIsLoading(false);
             }, 1000);

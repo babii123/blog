@@ -2,7 +2,7 @@
  * 获取数据的请求
  */
 import requests from ".";
-import { GetAritcleListModel, AuthorCardModel, TypeModel, ArticleInfoModel, DetailRelateModel, FramerInfoModel, ArticleCountModel, ArticleEditModel, FramerEditModel, ArticleDetailModel, CommentListModel } from "../model/ResponseModel";
+import { GetAritcleListModel, AuthorCardModel, TypeModel, ArticleInfoModel, DetailRelateModel, FramerInfoModel, ArticleCountModel, ArticleEditModel, FramerEditModel, ArticleDetailModel, CommentListModel, AttentionFramerModel } from "../model/ResponseModel";
 
 // 获取文章总数
 export const getArticleCount = (countUrl: string) => requests.get<number>(`${countUrl}`)
@@ -29,7 +29,7 @@ export const getArticleListByFramerId = (framer_id: string) => requests.get<Arra
 // 获取点赞 文章列表
 export const getLikeListByFramerId = (framer_id: string) => requests.get<Array<ArticleInfoModel>>(`/like/getListByFramerId/${framer_id}`)
 // 获取关注 用户列表
-export const getFollowListByFramerId = (framer_id: string) => requests.get<Array<ArticleInfoModel>>(`/attention/getFollow/${framer_id}`)
+export const getFollowListByFramerId = (framer_id: string) => requests.get<Array<AttentionFramerModel>>(`/attention/getFollow/${framer_id}`)
 // 获取被关注 用户列表
 export const getBeFollowListByFramerId = (framer_id: string) => requests.get<Array<ArticleInfoModel>>(`/attention/getBeFollow/${framer_id}`)
 
@@ -44,3 +44,6 @@ export const getArticle = (articleId: string) => requests.get<ArticleEditModel>(
 
 // 获取评论
 export const getCommentByArticleId = (articleId: string) => requests.get<Array<CommentListModel>>(`/comment/${articleId}`)
+
+// 获取未读私信数量
+export const getUnReadCount = (userId: string) => requests.get<number>(`/private_msg/getUnReadCount/${userId}`)

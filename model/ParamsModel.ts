@@ -19,13 +19,13 @@ export interface RegisterParam {
       recentTime: null
 }
 
-export interface CommentParam{
+export interface CommentParam {
       articleId: string,
       framerId: string,
       content: string
 }
 
-export interface ReplyParam{
+export interface ReplyParam {
       articleId: string,
       framerId: string,
       content: string,
@@ -33,7 +33,40 @@ export interface ReplyParam{
       topCommentId: number
 }
 
-export interface LikeCommentParam{
+export interface LikeCommentParam {
       framerId: string,
       commentId: number
+}
+
+export interface PrivateMsgParam {
+      senderId: string,
+      receiverId: string,
+      userName: string,
+      avatar: string,
+      message: string
+}
+
+export interface PrivateMsgLinkManParam {
+      userId: string,
+      friendId: string,
+      userName: string,
+      avatar: string,
+      constatus: number,
+      needInit: number,
+      placeTop: number
+}
+
+export interface AddArticleParam {
+      id: string,
+      typeId: string,
+      framerId: string,
+      title: string,
+      articleContent: string,
+      introduce: string,
+      addTime: string,
+      updateTime: string,
+      viewCount: number,
+      likeCount: number,
+      collectCount: number,
+      commentCount: number;
 }

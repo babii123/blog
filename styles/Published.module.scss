@@ -1,0 +1,23 @@
+.result_text {
+  margin-bottom: 40px;
+  .result_title {
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    color: #252933;
+  }
+
+  .text_other {
+    text-align: center;
+    font-size: 14px;
+    line-height: 22px;
+    margin-top: 8px;
+    color: #4e5969;
+  }
+}
+
+.result_button {
+  background-color: #f4f9ff;
+  border: 1px solid #b3d5ff;
+  color: #1e80ff;
+}

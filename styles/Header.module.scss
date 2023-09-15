@@ -1,48 +1,99 @@
+$fontColor1: #8a919f;
+
 .header {
-      background-color: #fff;
-      // padding: .4rem;
-      // overflow: hidden;
-      height: 3.0rem;
-      // line-height: 2.8rem;
-      border-bottom: 1px solid #ccc;
+  background-color: #fff;
+  // padding: .4rem;
+  // overflow: hidden;
+  height: 3rem;
+  // line-height: 2.8rem;
+  border-bottom: 1px solid #ccc;
 }
 
 .header_creator {
-      position: fixed;
-      height: 3.0rem;
-      line-height: 3.0rem;
-      top: 0;
-      width: 100%;
-      background-color: #fff;
-      border-bottom: 1px solid #ccc;
-      transform: translateZ(0);
-      transition: transform .2s;
-      z-index: 250;
+  position: fixed;
+  height: 3rem;
+  line-height: 3rem;
+  top: 0;
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+  transform: translateZ(0);
+  transition: transform 0.2s;
+  z-index: 250;
 }
 
-
 .header_logo {
-      color: #1e90ff;
-      font-size: 1.4rem;
-      text-align: left;
-
+  color: #060606;
+  font-size: 1.4rem;
+  line-height: 2.4rem;
+  text-align: left;
+  .header_logo_img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    margin-top: 10px;
+  }
+  .header_logo_name {
+    color: #323232;
+    font-size: 18px;
+    font-weight: 600;
+  }
 }
 
 .header_txt {
-      font-size: 0.6rem;
-      color: #999;
-      display: inline-block;
-      padding-left: 0.3rem;
+  font-size: 0.6rem;
+  color: $fontColor1;
+  display: inline-block;
+  padding-left: 0.3rem;
 }
 
 .ant-meu {
-      line-height: 2.6rem;
-
+  line-height: 2.6rem;
 }
 
 .ant-menu-item {
-      font-size: .7rem !important;
-      padding-left: 1rem;
-      padding-right: 1rem;
-
+  font-size: 0.7rem !important;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+
+.notification {
+  color: $fontColor1;
+  &:hover {
+    color: #515767;
+  }
+}
+
+.creator_button {
+  border-radius: 3px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 1px 10px;
+}
+
+.creator_drop {
+  border-radius: 3px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  padding-left: 2px;
+  padding-right: 2px;
+  border-left: 1px solid hsla(0, 0%, 100%, 0.1);
+}
+
+.vip {
+  display: flex;
+  .vip_img {
+    width: 24px;
+    height: 24px;
+  }
+  .vip_words {
+    color: $fontColor1;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 22px;
+    margin-left: 4px;
+  }
+}
+
+
+
